@@ -14,10 +14,6 @@ data = mat_data['y']
 if data.ndim > 1:
     data = data[:, 0]
 
-# Select the first 10 seconds of audio data (assuming a sample rate of 44100 Hz)
-duration = 10  # seconds
-num_samples = sample_rate * duration
-data = data[:num_samples]
 
 # Ensure the data is of float type and normalize to [-1, 1] range
 data = data.astype(np.float32)
@@ -57,9 +53,9 @@ noisy_signal = data + noise
 playback = sa.play_buffer((noisy_signal[:2*sample_rate] * 32767).astype(np.int16), 1, 2, sample_rate)
 playback.wait_done()
 
-# Play the first 10 seconds of the audio after adaptive noise cancellation
-print("Playing the first 10 seconds of the audio after adaptive noise cancellation")
-playback = sa.play_buffer((error[:10*sample_rate] * 32767).astype(np.int16), 1, 2, sample_rate)
+# Play the audio after adaptive noise cancellation
+print("Playing the audio after adaptive noise cancellation")
+playback = sa.play_buffer((error[:] * 32767).astype(np.int16), 1, 2, sample_rate)
 playback.wait_done()
 
 # Save the processed audio
